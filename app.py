@@ -3,10 +3,10 @@ import json
 from flask import Flask, request, jsonify, render_template, send_from_directory
 import os
 
-# Thay thế bằng API key hợp lệ từ Google Cloud Console
+# Replace with a valid API key from Google Cloud Console
 api_key = 'AIzaSyD1bCkgsZEZCaV3eJbb5Ec_ITAuDNOPG84'
 
-# API endpoint của Gemini
+# API endpoint for Gemini
 api_url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={api_key}'
 
 app = Flask(__name__)
