@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            color: #ffffff;
+        }
+        form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            z-index: 1;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #666;
+        }
+        textarea, input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            display: inline-block;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10rem;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 0.15rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background-color: #0cf;
+        }
+        button::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0cf;
+            border-radius: 10rem;
+            z-index: -2;
+        }
+        button::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background-color: #099;
+            transition: all 0.3s;
+            border-radius: 10rem;
+            z-index: -1;
+        }
+        button:hover::before {
+            width: 100%;
+        }
+        h2 {
+            margin-top: 20px;
+            color: #ffffff;
+            z-index: 1;
+        }
+        #translated-text {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: calc(100% - 40px);
+            max-width: 300px;
+            text-align: center;
+            word-wrap: break-word;
+            z-index: 1;
+        }
+        .video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+            object-fit: cover;
+        }
+        .watermark {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.8rem;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop class="video-background">
+        <source src="bg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <h1>Language Translator</h1>
+    <form id="translate-form">
+        <label for="text">Text to translate:</label>
+        <textarea id="text" name="text" rows="4" cols="50"></textarea><br><br>
+        <label for="language">Target Language:</label>
+        <input type="text" id="language" name="language"><br><br>
+        <button type="button" onclick="translateText()">Translate</button>
+    </form>
+    <h2>Translated Text:</h2>
+    <p id="translated-text"></p>
+    
+    <div class="watermark">Built by ConThoBanSung, Karrigun</div>
+    
+    <script>
+        async function translateText() {
+            const text = document.getElementById('text').value;
+            const language = document.getElementById('language').value;
+
+            const response = await fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'text': text,
+                    'language': language
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById('translated-text').innerText = data.translated_text;
+        }
+    </script>
+</body>
+</html>
